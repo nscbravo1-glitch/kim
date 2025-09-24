@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดต่อฉัน | สไตล์วัยรุ่น</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
+        
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #4f524f 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
+        }
+        
+        #welcome-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #000000 0%, #4f524f 100%);
+            animation: fadeIn 1s ease-in-out;
+            z-index: 10;
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff6b88, 0 0 70px #ff6b88;
+            margin-bottom: 20px;
+        }
+
+        .enter-button {
+            background-color: #ff6b88;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .enter-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 136, 0.4);
+        }
+
+        /* CSS ของหน้า Contact */
+        .container {
+            display: none; /* ซ่อนหน้า Contact ไว้ก่อน */
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+            z-index: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #000000;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #ff6b88;
+            margin: 10px 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            width: 80px;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover .social-icon {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .facebook { background-color: #1877f2; color: white; }
+        .instagram { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); color: white; }
+        .line { background-color: #00b900; color: white; }
+        .tiktok { background-color: #000000; color: white; }
+        .website { background-color: #4CAF50; color: white; } /* CSS สำหรับไอคอนเว็บไซต์ใหม่ */
+        
+        .social-name {
+            font-size: 14px;
+            font-weight: 300;
+        }
+        
+        .music-player {
+            margin-top: 30px;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .music-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #ff6b88, 0 0 20px #ff6b88, 0 0 30px #ff6b88;
+            animation: neonGlow 1.5s infinite alternate;
+        }
+        
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 5px #dfdfdf, 0 0 10px #eeedf1; }
+            to { text-shadow: 0 0 10px #fbfbfc, 0 0 20px #f4f4f8, 0 0 30px #ebebec; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="welcome-page">
+        <h1 class="welcome-title">Welcome to My World</h1>
+        <button class="enter-button" onclick="enterWebsite()">
+            Enter
+        </button>
+    </div>
+
+    <div id="contact-page" class="container">
+        <img src="kim.jpg" alt="Profile" class="profile-img">
+        <h1 class="neon-text">ติดต่อฉันได้ที่นี่!</h1>
+        <p>มาคุยกันนะครับ ❤️</p>
+        
+        <div class="social-links">
+            <a href="https://www.facebook.com/tortanapop.rerutnkutjr.9" class="social-link" target="_blank">
+                <div class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <span class="social-name">Facebook</span>
+            </a>
+            
+            <a href=https://www.instagram.com/sjwoo._/" class="social-link" target="_blank">
+                <div class="social-icon instagram">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <span class="social-name">Instagram</span>
+            </a>
+            
+            <a href="https://drive.google.com/file/d/1ast8aGUc60JxoboL0hrhsTI4q_fl73hP/view?usp=drivesdk" class="social-link" target="_blank">
+                <div class="social-icon line">
+                    <i class="fab fa-line"></i>
+                </div>
+                <span class="social-name">Line</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@sherlock.kim" class="social-link" target="_blank">
+                <div class="social-icon tiktok">
+                    <i class="fab fa-tiktok"></i>
+                </div>
+                <span class="social-name">TikTok</span>
+            </a>
+            
+            <a href="me.html" class="social-link">
+                <div class="social-icon website">
+                    <i class="fas fa-globe"></i>
+                </div>
+            </a>
+        </div>
+        
+        <div class="music-player">
+            <audio id="bgMusic" controls autoplay>
+                <source src="s1.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="music-info">เพลงจะเล่นโดยอัตโนมัติเมื่อเข้าสู่หน้า</div>
+        </div>
+    </div>
+    
+    <script>
+        // Playlist เพลงของคุณ
+        const playlist = [
+            "s1.mp3",
+            "s2.mp3",
+            "s3.mp3"
+        ];
+        let currentSongIndex = 0;
+
+        function enterWebsite() {
+            const welcomePage = document.getElementById('welcome-page');
+            const contactPage = document.getElementById('contact-page');
+            const music = document.getElementById('bgMusic');
+
+            // ซ่อนหน้า Welcome และแสดงหน้า Contact
+            welcomePage.style.display = 'none';
+            contactPage.style.display = 'block';
+
+            // เริ่มเล่นเพลง
+            music.volume = 0.3;
+            music.play();
+
+            // ตั้งค่าให้เพลงเล่นวนลูปและเปลี่ยนเพลงอัตโนมัติ
+            music.addEventListener('ended', playNextSong);
+        }
+
+        function playNextSong() {
+            const music = document.getElementById('bgMusic');
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            music.src = playlist[currentSongIndex];
+            music.play();
+        }
+
+        // ตั้งค่าเพลงแรกเมื่อโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById('bgMusic');
+            music.src = playlist[currentSongIndex];
+        });
+    </script>
+</body>
+</html>
