@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Universe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --primary-color: #00ff41;
+            --sidebar-width: 300px;
+            --background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            color: #00ff41;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        /* Welcome Page */
+        #welcome-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 1s ease-in-out;
+            z-index: 20;
+        }
+
+        .welcome-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: #00ff41;
+            text-shadow: 
+                0 0 10px #00ff41,
+                0 0 20px #00ff41,
+                0 0 30px #00ff41,
+                0 0 40px #00ff41;
+            margin-bottom: 30px;
+            letter-spacing: 8px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-3px, 3px); }
+            94% { transform: translate(3px, -3px); }
+            96% { transform: translate(-3px, -3px); }
+        }
+
+        .matrix-subtitle {
+            font-size: 1.2rem;
+            color: #00ff41;
+            margin-bottom: 40px;
+            opacity: 0.7;
+            letter-spacing: 3px;
+        }
+
+        .enter-button {
+            font-family: 'Orbitron', sans-serif;
+            background: transparent;
+            color: #00ff41;
+            padding: 18px 60px;
+            border: 2px solid #00ff41;
+            border-radius: 0;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 4px;
+            box-shadow: 0 0 15px #00ff41;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .enter-button:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #00ff41;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .enter-button:hover:before {
+            left: 0;
+        }
+        
+        .enter-button:hover {
+            color: #000;
+            box-shadow: 0 0 30px #00ff41, 0 0 60px #00ff41;
+        }
+
+        /* Main Content Page */
+        .main-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            height: 100vh;
+            position: relative;
+            background-color: var(--background-color);
+        }
+
+        /* Left sidebar menu */
+        .sidebar {
+            background-color: rgba(0, 0, 0, 0.95);
+            border-right: 2px solid #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .sidebar:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 255, 65, 0.02) 50%,
+                transparent 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        .sidebar-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-shadow: 
+                0 0 10px var(--primary-color),
+                0 0 20px var(--primary-color);
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+            padding: 15px;
+            border: 2px solid var(--primary-color);
+            text-align: center;
+            animation: logoGlow 2s infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { box-shadow: 0 0 10px var(--primary-color); }
+            to { box-shadow: 0 0 20px var(--primary-color), inset 0 0 10px rgba(0, 255, 65, 0.2); }
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: block;
+            color: #00ff41;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 18px 15px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item a:before {
+            content: ">";
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item a:hover {
+            color: #000;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px var(--primary-color);
+            padding-left: 30px;
+        }
+
+        .nav-item a:hover:before {
+            left: 10px;
+            opacity: 1;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .social-link {
+            color: #00ff41;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            color: #00ff41;
+            transform: scale(1.3);
+            filter: drop-shadow(0 0 10px #00ff41);
+        }
+
+        /* Main content area */
+        .content-area {
+            overflow-y: auto;
+            padding: 60px;
+            transition: opacity 0.5s ease;
+            position: relative;
+        }
+
+        .content-area::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .content-area::-webkit-scrollbar-track {
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .content-area::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .content-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .content-section h2:before {
+            content: "//";
+            margin-right: 15px;
+            opacity: 0.5;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 400;
+            max-width: 900px;
+            opacity: 0.9;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+        }
+
+        /* Terminal effect */
+        .terminal-text {
+            font-family: 'Share Tech Mono', monospace;
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--primary-color);
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .terminal-text:before {
+            content: "$ ";
+            color: var(--primary-color);
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glitch effect for headers */
+        @keyframes textGlitch {
+            0%, 90%, 100% { 
+                transform: translate(0);
+                opacity: 1;
+            }
+            92% { 
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            94% { 
+                transform: translate(2px, -2px);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div id="welcome-page">
+        <h1 class="welcome-title">THE MATRIX</h1>
+        <p class="matrix-subtitle">[ SYSTEM LOADING... ]</p>
+        <button class="enter-button" onclick="enterWebsite()">
+            JACK IN
+        </button>
+        <audio id="bgMusic" controls autoplay style="display: none;">
+            <source src="s1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div class="main-content" id="main-content">
+        <div class="main-container">
+            
+            <div class="sidebar">
+                <div class="sidebar-logo">MATRIX<br/>PROTOCOL</div>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#" onclick="showSection('home')">[ INITIALIZE ]</a></li>
+                    <li class="nav-item"><a href="#" onclick="showSection('about')">[ IDENTITY ]</a></li>
+                    <li class="nav-item"><a href="#" onclick="showSection('portfolio')">[ ARCHIVES ]</a></li>
+                    <li class="nav-item"><a href="#" onclick="showSection('contact')">[ CONNECT ]</a></li>
+                </ul>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/yourprofile" class="social-link" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/yourprofile" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@yourusername" class="social-link" target="_blank"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+    
+            <div class="content-area">
+                <div id="home" class="content-section active">
+                    <h2>SYSTEM.INIT</h2>
+                    <p>
+                        ยินดีต้อนรับสู่ระบบ... คุณได้เชื่อมต่อเข้าสู่เมทริกซ์แล้ว<br><br>
+                        นี่คือพื้นที่ดิจิทัลส่วนตัวของผม ที่ซึ่งข้อมูลและความคิดไหลเวียนอย่างอิสระ<br>
+                        เลือกเมนูทางด้านซ้ายเพื่อสำรวจข้อมูลเพิ่มเติม...
+                    </p>
+                    <div class="terminal-text">
+                        >> ACCESS GRANTED<br>
+                        >> LOADING USER INTERFACE...<br>
+                        >> STATUS: CONNECTED
+                    </div>
+                </div>
+                
+                <div id="about" class="content-section">
+                    <h2>IDENTITY.LOG</h2>
+                    <p>
+                        ในโลกแห่งข้อมูลนี้ ผมเป็นเพียงหนึ่งในพลเมืองดิจิทัล...<br><br>
+                        ผมสนใจการเรียนรู้ สำรวจเทคโนโลยี และการสร้างสรรค์สิ่งใหม่ๆ<br>
+                        การพัฒนาเว็บไซต์นี้เป็นส่วนหนึ่งของการเดินทางในโลกเสมือนจริง<br><br>
+                        "There is no spoon" - ผมเชื่อว่าขีดจำกัดเดียวคือจินตนาการของเรา
+                    </p>
+                    <div class="terminal-text">
+                        >> SCANNING IDENTITY MATRIX...<br>
+                        >> USER PROFILE: ACTIVE<br>
+                        >> CONSCIOUSNESS: AWAKENED
+                    </div>
+                </div>
+    
+                <div id="portfolio" class="content-section">
+                    <h2>DATA.ARCHIVE</h2>
+                    <p>
+                        นี่คือคลังข้อมูลของผลงานและโปรเจกต์ต่างๆ ที่ผมได้สร้างขึ้นมา<br><br>
+                        แต่ละโปรเจกต์เป็นเหมือนโค้ดที่ถูกเขียนขึ้นในเมทริกซ์ เพื่อสร้างความเป็นจริงใหม่<br>
+                        *รอการอัพโหลดข้อมูลจากระบบ...*
+                    </p>
+                    <div class="terminal-text">
+                        >> ACCESSING ARCHIVE DATABASE...<br>
+                        >> FILES ENCRYPTED<br>
+                        >> DECRYPTION IN PROGRESS...
+                    </div>
+                </div>
+    
+                <div id="contact" class="content-section">
+                    <h2>NETWORK.LINK</h2>
+                    <p>
+                        ต้องการเชื่อมต่อ? ผมพร้อมรับสัญญาณจากคุณ...<br><br>
+                        ส่งข้อความผ่านช่องทางใดก็ได้ด้านล่าง เราจะเชื่อมต่อกันในเมทริกซ์<br>
+                        "Follow the white rabbit" 🐰
+                    </p>
+                    <div class="terminal-text">
+                        >> ESTABLISHING CONNECTION...<br>
+                        >> SIGNAL STRENGTH: OPTIMAL<br>
+                        >> READY TO RECEIVE TRANSMISSION
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#00ff41";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Playlist
+        const playlist = [
+            "s1.mp3",
+            "s2.mp3",
+            "s3.mp3"
+        ];
+        let currentSongIndex = 0;
+
+        function enterWebsite() {
+            const welcomePage = document.getElementById('welcome-page');
+            const mainContent = document.getElementById('main-content');
+            const music = document.getElementById('bgMusic');
+
+            welcomePage.style.display = 'none';
+            mainContent.style.display = 'block';
+
+            music.volume = 0.3;
+            music.play();
+            
+            music.addEventListener('ended', playNextSong);
+        }
+
+        function playNextSong() {
+            const music = document.getElementById('bgMusic');
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            music.src = playlist[currentSongIndex];
+            music.play();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById('bgMusic');
+            music.src = playlist[currentSongIndex];
+        });
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

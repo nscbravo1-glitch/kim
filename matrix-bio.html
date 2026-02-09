@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter The Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap');
+        
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff41;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        #welcome-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 1s ease-in-out;
+            z-index: 10;
+        }
+
+        .welcome-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #00ff41;
+            text-shadow: 
+                0 0 10px #00ff41,
+                0 0 20px #00ff41,
+                0 0 30px #00ff41,
+                0 0 40px #00ff41;
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+        }
+
+        .matrix-subtitle {
+            font-size: 1.2rem;
+            color: #00ff41;
+            margin-bottom: 40px;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+
+        .enter-button {
+            font-family: 'Orbitron', sans-serif;
+            background: transparent;
+            color: #00ff41;
+            padding: 15px 50px;
+            border: 2px solid #00ff41;
+            border-radius: 0;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 3px;
+            box-shadow: 0 0 10px #00ff41;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .enter-button:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #00ff41;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .enter-button:hover:before {
+            left: 0;
+        }
+        
+        .enter-button:hover {
+            color: #000;
+            box-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
+        }
+
+        /* Contact Page */
+        .container {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00ff41;
+            box-shadow: 
+                0 0 20px #00ff41,
+                inset 0 0 20px rgba(0, 255, 65, 0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+            z-index: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00ff41;
+            margin-bottom: 20px;
+            box-shadow: 
+                0 0 20px #00ff41,
+                0 0 40px rgba(0, 255, 65, 0.5);
+            filter: brightness(1.1) contrast(1.2);
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff41;
+            margin: 15px 0;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        
+        p {
+            color: #00ff41;
+            margin-bottom: 30px;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #00ff41;
+            transition: all 0.3s ease;
+            width: 80px;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-icon {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #00ff41;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 15px #00ff41;
+            transition: all 0.3s ease;
+            background: rgba(0, 255, 65, 0.1);
+        }
+        
+        .social-link:hover .social-icon {
+            box-shadow: 0 0 30px #00ff41, inset 0 0 20px #00ff41;
+            background: rgba(0, 255, 65, 0.2);
+        }
+        
+        .facebook, .instagram, .line, .tiktok, .website { 
+            background: transparent;
+            color: #00ff41;
+        }
+        
+        .social-name {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 20px;
+            border: 2px solid #00ff41;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-player:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.7);
+            transform: scale(1.05);
+        }
+        
+        .music-player audio {
+            display: none;
+        }
+        
+        .music-info {
+            font-size: 14px;
+            color: #00ff41;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        
+        .music-info.off {
+            opacity: 0.5;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
+            animation: neonGlow 1.5s infinite alternate;
+        }
+        
+        @keyframes neonGlow {
+            from { 
+                text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+            }
+            to { 
+                text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41;
+            }
+        }
+
+        /* Scanline effect */
+        .container:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 255, 65, 0.03) 50%,
+                transparent 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div id="welcome-page">
+        <h1 class="welcome-title">THE MATRIX</h1>
+        <p class="matrix-subtitle">Wake up, Neo...</p>
+        <button class="enter-button" onclick="enterWebsite()">
+            ENTER THE MATRIX
+        </button>
+    </div>
+
+    <div id="contact-page" class="container">
+        <img src="kim.jpg" alt="Profile" class="profile-img">
+        <h1 class="neon-text">CONNECTION ESTABLISHED</h1>
+        <p>Follow the white rabbit... 🐰</p>
+        
+        <div class="social-links">
+            <a href="https://www.facebook.com/tortanapop.rerutnkutjr.9" class="social-link" target="_blank">
+                <div class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <span class="social-name">Facebook</span>
+            </a>
+            
+            <a href="https://www.instagram.com/sjwoo._/" class="social-link" target="_blank">
+                <div class="social-icon instagram">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <span class="social-name">Instagram</span>
+            </a>
+            
+            <a href="https://drive.google.com/file/d/1ast8aGUc60JxoboL0hrhsTI4q_fl73hP/view?usp=drivesdk" class="social-link" target="_blank">
+                <div class="social-icon line">
+                    <i class="fab fa-line"></i>
+                </div>
+                <span class="social-name">Line</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@sherlock.kim" class="social-link" target="_blank">
+                <div class="social-icon tiktok">
+                    <i class="fab fa-tiktok"></i>
+                </div>
+                <span class="social-name">TikTok</span>
+            </a>
+            
+            <a href="matrix-portfolio.html" class="social-link">
+                <div class="social-icon website">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <span class="social-name">Portal</span>
+            </a>
+        </div>
+        
+        <div class="music-player" onclick="toggleMusic()">
+            <audio id="bgMusic">
+                <source src="s1.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="music-info" id="musicStatus">SYSTEM AUDIO: ON</div>
+        </div>
+    </div>
+    
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#00ff41";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Playlist
+        const playlist = [
+            "s1.mp3",
+            "s2.mp3",
+            "s3.mp3"
+        ];
+        let currentSongIndex = 0;
+        let isMusicPlaying = false;
+
+        function enterWebsite() {
+            const welcomePage = document.getElementById('welcome-page');
+            const contactPage = document.getElementById('contact-page');
+            const music = document.getElementById('bgMusic');
+
+            welcomePage.style.display = 'none';
+            contactPage.style.display = 'block';
+
+            // Start music at 24 seconds
+            music.currentTime = 24;
+            music.volume = 0.3;
+            music.play();
+            isMusicPlaying = true;
+
+            music.addEventListener('ended', playNextSong);
+        }
+
+        function playNextSong() {
+            const music = document.getElementById('bgMusic');
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            music.src = playlist[currentSongIndex];
+            music.currentTime = 24;
+            music.play();
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const musicStatus = document.getElementById('musicStatus');
+
+            if (isMusicPlaying) {
+                music.pause();
+                musicStatus.textContent = 'SYSTEM AUDIO: OFF';
+                musicStatus.classList.add('off');
+                isMusicPlaying = false;
+            } else {
+                music.play();
+                musicStatus.textContent = 'SYSTEM AUDIO: ON';
+                musicStatus.classList.remove('off');
+                isMusicPlaying = true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById('bgMusic');
+            music.src = playlist[currentSongIndex];
+        });
+    </script>
+</body>
+</html>
